@@ -1,6 +1,6 @@
 # Notes App with Search
 
-A lightweight full-stack notes app built with **Flask**, **HTML**, **CSS**, and **Vanilla JavaScript**. It supports CRUD operations and real-time search with case-insensitive keyword highlighting.
+A lightweight full-stack notes application built with **Flask**, **HTML**, **CSS**, and **Vanilla JavaScript**. It lets users create, edit, delete, and search notes instantly, with case-insensitive keyword highlighting for a smoother note-browsing experience.
 
 ## Features
 
