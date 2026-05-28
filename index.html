@@ -1,276 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Notes</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--cream:#faf8f3;--ink:#1a1814;--muted:#7a7568;--accent:#c8553d;--border:#e8e3d8;--card:#fff;--shadow:0 2px 12px rgba(26,24,20,.08)}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
 
-    :root {
-      --cream: #faf8f3;
-      --ink: #1a1814;
-      --muted: #7a7568;
-      --accent: #c8553d;
-      --accent-light: #f5ede9;
-      --border: #e8e3d8;
-      --card: #ffffff;
-      --shadow: 0 2px 12px rgba(26,24,20,0.08);
-    }
+    header{background:var(--ink);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    header h1{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--cream)}
+    header h1 span{color:var(--accent)}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--ink);
-      min-height: 100vh;
-    }
+    .search-wrap{position:relative;width:280px}
+    .search-wrap input{width:100%;padding:9px 16px 9px 38px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;background:rgba(255,255,255,.08);color:#fff;font-family:'DM Sans',sans-serif;font-size:.875rem;outline:none;transition:border-color .2s}
+    .search-wrap input::placeholder{color:rgba(255,255,255,.4)}
+    .search-wrap input:focus{border-color:var(--accent)}
+    .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.4)}
 
-    header {
-      background: var(--ink);
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      color: var(--cream);
-    }
-    header h1 span { color: var(--accent); }
+    .container{max-width:1100px;margin:0 auto;padding:40px 24px}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .notes-count{font-size:.8rem;color:var(--muted);font-weight:500;letter-spacing:.05em;text-transform:uppercase}
 
-    .search-wrap {
-      position: relative;
-      width: 280px;
-    }
-    .search-wrap input {
-      width: 100%;
-      padding: 9px 16px 9px 38px;
-      border: 1.5px solid rgba(255,255,255,0.15);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-wrap input::placeholder { color: rgba(255,255,255,0.4); }
-    .search-wrap input:focus { border-color: var(--accent); }
-    .search-wrap svg {
-      position: absolute;
-      left: 11px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255,255,255,0.4);
-    }
+    .btn-new{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s,transform .1s}
+    .btn-new:hover{background:#b34530;transform:translateY(-1px)}
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
+    .notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-    .notes-count {
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
+    .note-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:22px;cursor:pointer;transition:box-shadow .2s,transform .2s;animation:fadeIn .3s ease}
+    .note-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .note-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:8px}
+    .note-card p{font-size:.85rem;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .note-card .meta{margin-top:14px;font-size:.72rem;color:#b0aa9e;display:flex;justify-content:space-between;align-items:center}
+    .note-card .delete-btn{background:none;border:none;color:#c4bdb0;cursor:pointer;padding:2px 4px;border-radius:4px;transition:color .2s}
+    .note-card .delete-btn:hover{color:var(--accent)}
 
-    .btn-new {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn-new:hover { background: #15c10c; transform: translateY(-1px); }
+    mark{background:#ffe08a;border-radius:2px;padding:0 2px}
 
-    .notes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
+    .empty{text-align:center;padding:80px 20px;color:var(--muted);grid-column:1/-1}
+    .empty .icon{font-size:3rem;margin-bottom:12px}
+    .empty h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ink);margin-bottom:6px}
 
-    .note-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 22px;
-      cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.2s;
-      animation: fadeIn 0.3s ease;
-    }
-    .note-card:hover {
-      box-shadow: var(--shadow);
-      transform: translateY(-2px);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .note-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      margin-bottom: 8px;
-    }
-    .note-card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.55;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .note-card .meta {
-      margin-top: 14px;
-      font-size: 0.72rem;
-      color: #b0aa9e;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .note-card .delete-btn {
-      background: none;
-      border: none;
-      color: #c4bdb0;
-      cursor: pointer;
-      padding: 2px 4px;
-      border-radius: 4px;
-      transition: color 0.2s;
-    }
-    .note-card .delete-btn:hover { color: var(--accent); }
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,24,20,.5);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--card);border-radius:16px;padding:32px;width:100%;max-width:520px;margin:20px;animation:modalIn .25s ease}
+    @keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+    .modal h2{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:20px}
+    .modal input,.modal textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s;resize:none}
+    .modal input:focus,.modal textarea:focus{border-color:var(--accent);background:#fff}
+    .modal input{margin-bottom:12px}
+    .modal textarea{height:160px;line-height:1.6}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+    .btn-cancel{background:none;border:1.5px solid var(--border);color:var(--muted);padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.875rem;cursor:pointer}
+    .btn-save{background:var(--accent);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;cursor:pointer}
+    .btn-save:hover{background:#b34530}
 
-    mark { background: #ffe08a; border-radius: 2px; padding: 0 2px; }
+    .toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--cream);padding:10px 18px;border-radius:8px;font-size:.85rem;opacity:0;transform:translateY(8px);transition:all .3s;z-index:300;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
 
-    .empty {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--muted);
-      grid-column: 1 / -1;
-    }
-    .empty .icon { font-size: 3rem; margin-bottom: 12px; }
-    .empty h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--ink);
-      margin-bottom: 6px;
-    }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(26,24,20,0.5);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(3px);
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 32px;
-      width: 100%;
-      max-width: 520px;
-      margin: 20px;
-      animation: modalIn 0.25s ease;
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    .modal h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-    }
-    .modal input, .modal textarea {
-      width: 100%;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 11px 14px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      color: var(--ink);
-      background: var(--cream);
-      outline: none;
-      transition: border-color 0.2s;
-      resize: none;
-    }
-    .modal input:focus, .modal textarea:focus {
-      border-color: var(--accent);
-      background: #fff;
-    }
-    .modal input { margin-bottom: 12px; }
-    .modal textarea { height: 160px; line-height: 1.6; }
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
-    .btn-cancel {
-      background: none;
-      border: 1.5px solid var(--border);
-      color: var(--muted);
-      padding: 9px 18px;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      cursor: pointer;
-    }
-    .btn-save {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 9px 22px;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .btn-save:hover { background: #b34530; }
-
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--ink);
-      color: var(--cream);
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all 0.3s;
-      z-index: 300;
-      pointer-events: none;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
+    @media(max-width:600px){header{padding:16px 18px}.search-wrap{width:160px}.container{padding:24px 16px}}
   </style>
 </head>
 <body>
@@ -308,136 +99,107 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const API = 'http://localhost:5000/api/notes';
-  let editingId = null;
-  let currentQuery = '';
+  const API='http://localhost:5000/api/notes';
+  let editingId=null, currentQuery='';
 
-  async function loadNotes(query = '') {
-    currentQuery = query;
-    const url = query ? `${API}?q=${encodeURIComponent(query)}` : API;
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      renderNotes(data, query);
-    } catch {
-      document.getElementById('notesGrid').innerHTML = `
-        <div class="empty">
-          <div class="icon">⚠️</div>
-          <h3>Can't connect to server</h3>
-          <p>Make sure Flask backend is running on port 5000</p>
-        </div>`;
+  async function loadNotes(query=''){
+    currentQuery=query;
+    const url=query?`${API}?q=${encodeURIComponent(query)}`:API;
+    try{
+      const data=await(await fetch(url)).json();
+      renderNotes(data,query);
+    }catch{
+      document.getElementById('notesGrid').innerHTML=`<div class="empty"><div class="icon">⚠️</div><h3>Can't connect to server</h3><p>Make sure Flask is running on port 5000</p></div>`;
     }
   }
 
-  function renderNotes(notes, query) {
-    const grid = document.getElementById('notesGrid');
-    document.getElementById('notesCount').textContent =
-      `${notes.length} NOTE${notes.length !== 1 ? 'S' : ''}`;
-
-    if (notes.length === 0) {
-      grid.innerHTML = `<div class="empty">
-        <div class="icon">📝</div>
-        <h3>${query ? 'No matches found' : 'No notes yet'}</h3>
-        <p>${query ? `Nothing matches "${query}"` : 'Click "New Note" to get started'}</p>
-      </div>`;
+  function renderNotes(notes,query){
+    const grid=document.getElementById('notesGrid');
+    document.getElementById('notesCount').textContent=`${notes.length} NOTE${notes.length!==1?'S':''}`;
+    if(!notes.length){
+      grid.innerHTML=`<div class="empty"><div class="icon">📝</div><h3>${query?'No matches found':'No notes yet'}</h3><p>${query?`Nothing matches "${query}"`:'Click "New Note" to get started'}</p></div>`;
       return;
     }
-
-    grid.innerHTML = notes.map(n => {
-      const title = highlight(n.title, query);
-      const body  = highlight(n.body, query);
-      const date  = new Date(n.updated_at).toLocaleDateString('en-US',
-        { month:'short', day:'numeric', year:'numeric' });
-      return `
-        <div class="note-card" onclick="editNote('${n.id}')">
-          <h3>${title}</h3>
-          ${n.body ? `<p>${body}</p>` : ''}
-          <div class="meta">
-            <span>${date}</span>
-            <button class="delete-btn" onclick="deleteNote(event,'${n.id}')">✕</button>
-          </div>
-        </div>`;
+    grid.innerHTML=notes.map(n=>{
+      const date=new Date(n.updated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      return `<div class="note-card" onclick="editNote('${n.id}')">
+        <h3>${highlight(n.title,query)}</h3>
+        ${n.body?`<p>${highlight(n.body,query)}</p>`:''}
+        <div class="meta"><span>${date}</span>
+        <button class="delete-btn" onclick="deleteNote(event,'${n.id}')">✕</button></div>
+      </div>`;
     }).join('');
   }
 
-  function highlight(text, query) {
-    if (!query || !text) return escHtml(text || '');
-    const escaped = escHtml(text);
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-    return escaped.replace(regex, '<mark>$1</mark>');
+  function highlight(text,query){
+    if(!query||!text) return escHtml(text||'');
+    return escHtml(text).replace(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'),'<mark>$1</mark>');
   }
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+  function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
   let searchTimer;
-  document.getElementById('searchInput').addEventListener('input', e => {
+  document.getElementById('searchInput').addEventListener('input',e=>{
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => loadNotes(e.target.value.trim()), 250);
+    searchTimer=setTimeout(()=>loadNotes(e.target.value.trim()),250);
   });
 
-  function openModal(title='', body='', id=null) {
-    editingId = id;
-    document.getElementById('modalTitle').textContent = id ? 'Edit Note' : 'New Note';
-    document.getElementById('noteTitle').value = title;
-    document.getElementById('noteBody').value = body;
+  function openModal(title='',body='',id=null){
+    editingId=id;
+    document.getElementById('modalTitle').textContent=id?'Edit Note':'New Note';
+    document.getElementById('noteTitle').value=title;
+    document.getElementById('noteBody').value=body;
     document.getElementById('modalOverlay').classList.add('open');
-    setTimeout(() => document.getElementById('noteTitle').focus(), 100);
+    setTimeout(()=>document.getElementById('noteTitle').focus(),100);
   }
-  function closeModal() {
+  function closeModal(){
     document.getElementById('modalOverlay').classList.remove('open');
-    editingId = null;
+    editingId=null;
   }
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  }
+  function handleOverlayClick(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 
-  async function saveNote() {
-    const title = document.getElementById('noteTitle').value.trim();
-    const body  = document.getElementById('noteBody').value.trim();
-    if (!title) { document.getElementById('noteTitle').focus(); return; }
-    const method = editingId ? 'PUT' : 'POST';
-    const url    = editingId ? `${API}/${editingId}` : API;
-    try {
-      await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, body })
+  async function saveNote(){
+    const title=document.getElementById('noteTitle').value.trim();
+    const body=document.getElementById('noteBody').value.trim();
+    if(!title){document.getElementById('noteTitle').focus();return;}
+    try{
+      await fetch(editingId?`${API}/${editingId}`:API,{
+        method:editingId?'PUT':'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({title,body})
       });
       closeModal();
       loadNotes(currentQuery);
-      showToast(editingId ? 'Note updated' : 'Note created');
-    } catch { showToast('Error saving note'); }
+      showToast(editingId?'Note updated':'Note created');
+    }catch{showToast('Error saving note');}
   }
 
-  async function editNote(id) {
-    try {
-      const res  = await fetch(`${API}/${id}`);
-      const note = await res.json();
-      openModal(note.title, note.body, id);
-    } catch {}
+  async function editNote(id){
+    try{
+      const note=await(await fetch(`${API}/${id}`)).json();
+      openModal(note.title,note.body,id);
+    }catch{}
   }
 
-  async function deleteNote(e, id) {
+  async function deleteNote(e,id){
     e.stopPropagation();
-    if (!confirm('Delete this note?')) return;
-    try {
-      await fetch(`${API}/${id}`, { method: 'DELETE' });
+    if(!confirm('Delete this note?')) return;
+    try{
+      await fetch(`${API}/${id}`,{method:'DELETE'});
       loadNotes(currentQuery);
       showToast('Note deleted');
-    } catch { showToast('Error deleting note'); }
+    }catch{showToast('Error deleting note');}
   }
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
+  function showToast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    setTimeout(()=>t.classList.remove('show'),2500);
   }
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') saveNote();
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape') closeModal();
+    if((e.ctrlKey||e.metaKey)&&e.key==='Enter') saveNote();
   });
 
   loadNotes();
